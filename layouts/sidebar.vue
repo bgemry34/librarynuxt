@@ -9,13 +9,13 @@
                             <a class="nav-link pl-0 text-nowrap" href="#"><i class="fa fa-bullseye fa-fw"></i> <span class="font-weight-bold">Library System</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link pl-0" href="#"><i class="fa fa-book fa-fw"></i> <span class="d-none d-md-inline">Link</span></a>
+                            <nuxt-link :to="'dashboard/BookManagement'"><span class="d-none d-md-inline">Book Management</span></nuxt-link>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link pl-0" href="#"><i class="fa fa-cog fa-fw"></i> <span class="d-none d-md-inline">Link</span></a>
+                            <a class="nav-link pl-0" href="#"><i class="fa fa-cog fa-fw"></i> <span class="d-none d-md-inline">Borrow Book</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link pl-0" href="#"><i class="fa fa-heart codeply fa-fw"></i> <span class="d-none d-md-inline">Codeply</span></a>
+                            <a class="nav-link pl-0" href="#"><i class="fa fa-heart codeply fa-fw"></i> <span class="d-none d-md-inline">User management</span></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link pl-0" href="#"><i class="fa fa-star codeply fa-fw"></i> <span class="d-none d-md-inline">Link</span></a>
