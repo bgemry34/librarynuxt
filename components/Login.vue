@@ -6,19 +6,19 @@
                     <div class="card">
                         <div class="card-body">
                             <h1 class="text-center mb-4">LOGIN</h1>
-                            <form action="" autocomplete="off">
+                            <form v-on:submit="onSubmit" action="" autocomplete="off">
                                 <div class="form-group">
                                     <b-form-select v-model="usertype" :options="usertypes"></b-form-select>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="username" placeholder="Username...">
+                                    <input type="text" v-model="username" class="form-control" name="username" placeholder="Username...">
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" class="form-control" name="password" placeholder="Password...">
+                                    <input type="password" v-model="password" class="form-control" name="password" placeholder="Password...">
                                 </div>
-                                <nuxt-link :to="'/dashboard'">
-                                <button type="button" id="sendlogin" class="btn btn-primary form-control mt-2">LOGIN</button>
-                                </nuxt-link>
+                                <button type="submit" id="sendlogin" class="btn btn-primary form-control mt-2">
+                                    LOGIN
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -29,15 +29,34 @@
 </template>
 
 <script>
+import {loginUser} from './../api/users.js'
+
 export default {
     data(){
         return{
             usertype:'',
             usertypes:[
                 { value: '', text: 'Please select an usertype' },
-                { value: 'Student', text: 'Admin' },
-                { value: 'Admin', text: 'Student' }
-            ]
+                { value: 'admin', text: 'Admin' },
+                { value: 'student', text: 'Student' }
+            ],
+            username:'',
+            password:''
+        }
+    },
+    methods:{
+        async onSubmit(e){
+            e.preventDefault();
+            const {usertype, username, password} = this;
+            let login = {
+                usertype,
+                username,
+                password
+            };
+
+            const res = await loginUser(login);
+
+            console.log(login, res);
         }
     }
 }

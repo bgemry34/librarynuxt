@@ -5,10 +5,10 @@
           <div class="col-xs-12">
               <div class="row">
                   <div class="col-md-6">
-                      <input type="text" name="" id="" class="form-control w-50" placeholder="Search..." >
+                      <input type="text" name="" id="" class="form-control" placeholder="Search..." >
                   </div>
                   <div class="col-md-6">
-                      <button class="btn btn-success ml-auto d-block">Add books</button>
+                      <button class="btn btn-success ml-auto d-block"  id="show-btn" @click="$bvModal.show('bv-modal-example')" >Add books</button>
                   </div>
               </div>
           </div>
@@ -17,11 +17,11 @@
       <table class="table">
             <thead>
                 <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Author</th>
-                <th scope="col">Genre</th>
-                <th scope="col">Date Created</th>
-                <th scope="col" class="text-center"><div class="ml-1">Actions</div></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Genre</th>
+                    <th scope="col">Date Created</th>
+                    <th scope="col" class="text-center"><div class="ml-1">Actions</div></th>
                 </tr>
             </thead>
             <tbody>
@@ -31,15 +31,15 @@
                     <td>Otto</td>
                     <td>@mdo</td>
                     <td class="text-center">
-                        <div> 
+                        <div>
                             <ul>
                             <!-- edit -->
                             <li class="d-inline">
-                                <b-icon icon="pencil-square" variant="success" scale="2" aria-hidden="true"></b-icon>
+                                <b-icon class="pointer" icon="pencil-square" variant="success" scale="2" aria-hidden="true"></b-icon>
                             </li>
                             <!-- delete -->
                             <li class="d-inline mx-4">
-                                <b-icon icon="trash" variant="danger" scale="2" aria-hidden="true"></b-icon>
+                                <b-icon class="pointer" icon="trash" variant="danger" scale="2" aria-hidden="true"></b-icon>
                             </li>
                         </ul>
                         </div>
@@ -59,6 +59,54 @@
                 </tr>
             </tbody>
         </table>
+        
+        <b-modal id="bv-modal-example" hide-footer>
+            <template #modal-title>
+                Add Book
+            </template>
+            <b-form-group
+            label="Title"
+            label-for="name-input"
+            invalid-feedback="Name is required"
+            :state="nameState"
+            >
+            <b-form-input
+                id="name-input"
+                v-model="name"
+                :state="nameState"
+                required
+            ></b-form-input>
+            </b-form-group>
+
+            <b-form-group
+            label="Label"
+            label-for="name-input"
+            invalid-feedback="Name is required"
+            :state="nameState"
+            >
+            <b-form-input
+                id="name-input"
+                v-model="name"
+                :state="nameState"
+                required
+            ></b-form-input>
+            </b-form-group>
+            
+            <b-form-group
+            label="Genre"
+            label-for="name-input"
+            invalid-feedback="Name is required"
+            :state="nameState"
+            >
+            <b-form-input
+                id="name-input"
+                v-model="name"
+                :state="nameState"
+                required
+            ></b-form-input>
+            </b-form-group>
+            <input type="submit" value="Submit" class="btn btn-primary form-control" />
+        </b-modal>
   </div>
 </template>
 
@@ -69,5 +117,7 @@ export default {
 </script>
 
 <style>
-
+    .pointer{
+        cursor: pointer;
+    }
 </style>

@@ -9,7 +9,7 @@
                             <a class="nav-link pl-0 text-nowrap" href="#"><i class="fa fa-bullseye fa-fw"></i> <span class="font-weight-bold">Library System</span></a>
                         </li>
                         <li class="nav-item">
-                            <nuxt-link :to="'dashboard/BookManagement'"><span class="d-none d-md-inline">Book Management</span></nuxt-link>
+                            <nuxt-link :to="'/dashboard/BookManagement'"><span class="d-none d-md-inline">Book Management</span></nuxt-link>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link pl-0" href="#"><i class="fa fa-cog fa-fw"></i> <span class="d-none d-md-inline">Borrow Book</span></a>
