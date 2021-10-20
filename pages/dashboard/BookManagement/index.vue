@@ -1,6 +1,6 @@
 <template>
   <div>
-      <h1>Book management</h1>
+      <h1>Book Management</h1>
       <div class="container">
           <div class="col-xs-12">
               <div class="row">
@@ -8,7 +8,7 @@
                       <input type="text" id="" class="form-control" placeholder="Search..." >
                   </div>
                   <div class="col-md-6">
-                      <button class="btn btn-success ml-auto d-block"  id="show-btn" @click="$bvModal.show('bv-modal-example')" >Add books</button>
+                      <button class="btn btn-success ml-auto d-block"  id="show-btn" @click="$bvModal.show('create-book-modal')" >Add books</button>
                   </div>
               </div>
           </div>
@@ -33,16 +33,18 @@
                     <td>{{formatDate(book.dateCreated)}} </td>
                     <td class="text-center">
                         <div>
-                            <ul class="row">
-                            <!-- edit -->
-                            <li class="mx-3">
-                                <b-icon class="pointer" scale="1.5" icon="pencil-square" variant="success" aria-hidden="true"></b-icon>
-                            </li>
-                            <!-- delete -->
-                            <li class="mx-3">
-                                <b-icon class="pointer" scale="1.5" icon="trash" variant="danger" aria-hidden="true"></b-icon>
-                            </li>
-                        </ul>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <!-- edit -->
+                                    <div class="col-md-6">
+                                        <b-icon class="pointer" scale="1.5" icon="pencil-square" variant="success" aria-hidden="true"></b-icon>
+                                    </div>
+                                    <!-- delete -->
+                                    <div class="col-md-6">
+                                        <b-icon class="pointer" scale="1.5" icon="trash" variant="danger" aria-hidden="true"></b-icon>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </td>
                 </tr>
@@ -50,7 +52,7 @@
             </tbody>
         </table>
         
-        <b-modal id="bv-modal-example" hide-footer>
+        <b-modal id="create-book-modal" hide-footer>
             <template #modal-title>
                 Add Book
             </template>
@@ -117,8 +119,9 @@ export default {
     data(){
         return {
             book:{
+                id:'',
                 title:'', 
-                genre:'', 
+                genre:'',
                 author:''
             }
         }
@@ -126,9 +129,11 @@ export default {
     methods:{
         ...mapActions(['fetchBooks', 'addBook']),
         formatDate,
-        onSubmit(e){
+        async onSubmit(e){
             e.preventDefault();
-            this.addBook(this.book);
+            const res = this.addBook(this.book);
+            if(res)
+                this.$bvModal.hide('create-book-modal');
         }
     },
     computed:mapGetters(['allBooks']),

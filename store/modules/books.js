@@ -14,13 +14,18 @@ const actions = {
     },
     async addBook({commit}, book){
         const res = await _createBook(book);
-        console.log(res);
-    },
+        if(res.status == 201)
+        {
+            commit('addBook', res.data);
+            return true;
+        }
+        return false;
+    }
 };
 
 const mutations = {
     setBooks:(state, books) => (state.books = books),
-    addBook:(stsate, book) => state.books =[book, ...state.books] 
+    addBook:(state, book) => state.books =[book, ...state.books] 
 };
 
 export default {
