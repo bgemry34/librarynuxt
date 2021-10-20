@@ -7,6 +7,11 @@
                         <div class="card-body">
                             <h1 class="text-center mb-4">LOGIN</h1>
                             <form v-on:submit="onSubmit" action="" autocomplete="off">
+                                <template v-if="alert">
+                                    <div class="alert alert-danger text-center" role="alert">
+                                        Incorrect Username and Password
+                                    </div>
+                                </template>
                                 <div class="form-group">
                                     <b-form-select v-model="usertype" :options="usertypes"></b-form-select>
                                 </div>
@@ -41,7 +46,8 @@ export default {
                 { value: 'student', text: 'Student' }
             ],
             username:'',
-            password:''
+            password:'',
+            alert:false
         }
     },
     methods:{
@@ -53,10 +59,18 @@ export default {
                 username,
                 password
             };
-
+            
             const res = await loginUser(login);
-
-            console.log(login, res);
+            if(res.status == 200){
+                const { token } = res.data;
+                sessionStorage.setItem('userToken', token);
+                window.location.replace("/dashboard");
+                return;
+            }
+            this.alert = true;
+            setTimeout(()=>{
+                this.alert = false;
+            }, 5000)
         }
     }
 }

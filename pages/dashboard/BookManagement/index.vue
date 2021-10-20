@@ -5,7 +5,7 @@
           <div class="col-xs-12">
               <div class="row">
                   <div class="col-md-6">
-                      <input type="text" name="" id="" class="form-control" placeholder="Search..." >
+                      <input type="text" id="" class="form-control" placeholder="Search..." >
                   </div>
                   <div class="col-md-6">
                       <button class="btn btn-success ml-auto d-block"  id="show-btn" @click="$bvModal.show('bv-modal-example')" >Add books</button>
@@ -17,7 +17,7 @@
       <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">Name</th>
+                    <th scope="col">Title</th>
                     <th scope="col">Author</th>
                     <th scope="col">Genre</th>
                     <th scope="col">Date Created</th>
@@ -25,38 +25,28 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Mark</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
+                
+                <tr v-for="book in allBooks" :key="book.id">
+                    <td>{{book.title}}</td>
+                    <td>{{book.author}}</td>
+                    <td>{{book.genre}} </td>
+                    <td>{{formatDate(book.dateCreated)}} </td>
                     <td class="text-center">
                         <div>
-                            <ul>
+                            <ul class="row">
                             <!-- edit -->
-                            <li class="d-inline">
-                                <b-icon class="pointer" icon="pencil-square" variant="success" scale="2" aria-hidden="true"></b-icon>
+                            <li class="mx-3">
+                                <b-icon class="pointer" scale="1.5" icon="pencil-square" variant="success" aria-hidden="true"></b-icon>
                             </li>
                             <!-- delete -->
-                            <li class="d-inline mx-4">
-                                <b-icon class="pointer" icon="trash" variant="danger" scale="2" aria-hidden="true"></b-icon>
+                            <li class="mx-3">
+                                <b-icon class="pointer" scale="1.5" icon="trash" variant="danger" aria-hidden="true"></b-icon>
                             </li>
                         </ul>
                         </div>
                     </td>
                 </tr>
-                <tr>
-                <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                </tr>
+                
             </tbody>
         </table>
         
@@ -64,60 +54,96 @@
             <template #modal-title>
                 Add Book
             </template>
-            <b-form-group
-            label="Title"
-            label-for="name-input"
-            invalid-feedback="Name is required"
-            :state="nameState"
-            >
-            <b-form-input
-                id="name-input"
-                v-model="name"
-                :state="nameState"
-                required
-            ></b-form-input>
-            </b-form-group>
+            <form action="" v-on:submit="onSubmit" >
+                <b-form-group
+                    label="Title"
+                    label-for="title-input"
+                    invalid-feedback="Title is required"
+                >
+                <b-form-input
+                    id="title-input"
+                    type="text" 
+                    required
+                    v-model.lazy="book.title"
+                    debounce="100"
+                    placeholder="Enter title..."
+                ></b-form-input>
+                </b-form-group>
 
-            <b-form-group
-            label="Label"
-            label-for="name-input"
-            invalid-feedback="Name is required"
-            :state="nameState"
-            >
-            <b-form-input
-                id="name-input"
-                v-model="name"
-                :state="nameState"
+                <b-form-group
+                    label="Author"
+                    label-for="author-input"
+                    invalid-feedback="Name is required"
+                >
+                <b-form-input
+                    id="author-input"
+                    type="text" 
+                    required
+                    v-model="book.author"
+                    debounce="100"
+                    placeholder="Enter author..."
+                ></b-form-input>
+                </b-form-group>
+                
+                <b-form-group
+                    label="Genre"
+                    label-for="genre-input"
+                    invalid-feedback="Name is required"
+                >
+                <b-form-input 
+                id="genre-input"
+                v-model="book.genre" 
+                type="text" 
                 required
-            ></b-form-input>
-            </b-form-group>
-            
-            <b-form-group
-            label="Genre"
-            label-for="name-input"
-            invalid-feedback="Name is required"
-            :state="nameState"
-            >
-            <b-form-input
-                id="name-input"
-                v-model="name"
-                :state="nameState"
-                required
-            ></b-form-input>
-            </b-form-group>
-            <input type="submit" value="Submit" class="btn btn-primary form-control" />
+                placeholder="Enter genre..."
+                debounce="100">
+                 </b-form-input>
+                </b-form-group>
+                <input 
+                    type="submit" 
+                    value="Submit" 
+                    class="btn btn-primary form-control"
+                />
+            </form>
         </b-modal>
   </div>
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex'
+import {formatDate} from './../../../helper/Tools'
 export default {
     layout: 'sidebar',
+    data(){
+        return {
+            book:{
+                title:'', 
+                genre:'', 
+                author:''
+            }
+        }
+    },
+    methods:{
+        ...mapActions(['fetchBooks', 'addBook']),
+        formatDate,
+        onSubmit(e){
+            e.preventDefault();
+            this.addBook(this.book);
+        }
+    },
+    computed:mapGetters(['allBooks']),
+    created(){
+        this.fetchBooks();
+        console.log(this.book);
+    }
 }
 </script>
 
-<style>
+<style scoped>
     .pointer{
         cursor: pointer;
+    }
+    ul{
+        list-style-type:none;
     }
 </style>
