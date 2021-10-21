@@ -1,4 +1,4 @@
-import {_fetchBooks, _createBook} from './../../api/books'
+import {_fetchBooks, _createBook, _editBook} from './../../api/books'
 
 const state = () => ({
     books:[
@@ -20,12 +20,26 @@ const actions = {
             return true;
         }
         return false;
+    },
+    async editBook({commit}, book){
+        const res = await _editBook(book);
+        if(res.status == 200)
+        {
+            commit('updateBook', res.data);
+            return true;
+        }
+        return false;
     }
 };
 
 const mutations = {
     setBooks:(state, books) => (state.books = books),
-    addBook:(state, book) => state.books =[book, ...state.books] 
+    addBook:(state, book) => state.books =[book, ...state.books], 
+    updateBook:(state, book)=> {
+        state.books = state.books.map(_book=>{
+            return _book.id !== book.id ? _book : book;
+        })
+    }
 };
 
 export default {

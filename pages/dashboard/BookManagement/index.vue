@@ -8,7 +8,7 @@
                       <input type="text" id="" class="form-control" placeholder="Search..." >
                   </div>
                   <div class="col-md-6">
-                      <button class="btn btn-success ml-auto d-block"  id="show-btn" @click="$bvModal.show('create-book-modal')" >Add books</button>
+                      <button class="btn btn-success ml-auto d-block"  id="show-btn" @click="$bvModal.show('upsert-book-modal'); clearBookInputs();" >Add books</button>
                   </div>
               </div>
           </div>
@@ -26,18 +26,24 @@
             </thead>
             <tbody>
                 
-                <tr v-for="book in allBooks" :key="book.id">
-                    <td>{{book.title}}</td>
-                    <td>{{book.author}}</td>
-                    <td>{{book.genre}} </td>
-                    <td>{{formatDate(book.dateCreated)}} </td>
+                <tr v-for="_book in allBooks" :key="_book.id">
+                    <td>{{_book.title}}</td>
+                    <td>{{_book.author}}</td>
+                    <td>{{_book.genre}} </td>
+                    <td>{{formatDate(_book.dateCreated)}} </td>
                     <td class="text-center">
                         <div>
                             <div class="col-md-12">
                                 <div class="row">
                                     <!-- edit -->
                                     <div class="col-md-6">
-                                        <b-icon class="pointer" scale="1.5" icon="pencil-square" variant="success" aria-hidden="true"></b-icon>
+                                        <b-icon class="pointer" 
+                                        scale="1.5" 
+                                        icon="pencil-square" 
+                                        variant="success" 
+                                        aria-hidden="true"
+                                        @click="showUpdateModal(_book)">
+                                        </b-icon>
                                     </div>
                                     <!-- delete -->
                                     <div class="col-md-6">
@@ -52,70 +58,23 @@
             </tbody>
         </table>
         
-        <b-modal id="create-book-modal" hide-footer>
-            <template #modal-title>
-                Add Book
-            </template>
-            <form action="" v-on:submit="onSubmit" >
-                <b-form-group
-                    label="Title"
-                    label-for="title-input"
-                    invalid-feedback="Title is required"
-                >
-                <b-form-input
-                    id="title-input"
-                    type="text" 
-                    required
-                    v-model.lazy="book.title"
-                    debounce="100"
-                    placeholder="Enter title..."
-                ></b-form-input>
-                </b-form-group>
-
-                <b-form-group
-                    label="Author"
-                    label-for="author-input"
-                    invalid-feedback="Name is required"
-                >
-                <b-form-input
-                    id="author-input"
-                    type="text" 
-                    required
-                    v-model="book.author"
-                    debounce="100"
-                    placeholder="Enter author..."
-                ></b-form-input>
-                </b-form-group>
-                
-                <b-form-group
-                    label="Genre"
-                    label-for="genre-input"
-                    invalid-feedback="Name is required"
-                >
-                <b-form-input 
-                id="genre-input"
-                v-model="book.genre" 
-                type="text" 
-                required
-                placeholder="Enter genre..."
-                debounce="100">
-                 </b-form-input>
-                </b-form-group>
-                <input 
-                    type="submit" 
-                    value="Submit" 
-                    class="btn btn-primary form-control"
-                />
-            </form>
-        </b-modal>
+        <UpsertBookModal 
+        :book="book" 
+        :onSubmit="onSubmit" 
+        :isEdit="isEdit" 
+        />
   </div>
 </template>
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
 import {formatDate} from './../../../helper/Tools'
+import UpsertBookModal from '../../../components/BookManagement/UpsertBookModal.vue'
 export default {
     layout: 'sidebar',
+    components:{
+        UpsertBookModal
+    },
     data(){
         return {
             book:{
@@ -123,23 +82,51 @@ export default {
                 title:'', 
                 genre:'',
                 author:''
-            }
+            },
+            isEdit:false
         }
     },
     methods:{
-        ...mapActions(['fetchBooks', 'addBook']),
+        ...mapActions(['fetchBooks', 'addBook', 'editBook']),
         formatDate,
+        clearBookInputs(){
+            this.isEdit = false;
+                this.book = {
+                id:'',
+                title:'', 
+                genre:'',
+                author:''
+            }
+            
+        },
         async onSubmit(e){
             e.preventDefault();
-            const res = this.addBook(this.book);
+
+            if(!this.isEdit)
+            this.clearBookInputs();
+
+            const res = !this.isEdit ? await this.addBook(this.book) : await this.editBook(this.book);
             if(res)
-                this.$bvModal.hide('create-book-modal');
+            {
+                let content = this.isEdit ? `Success Editing Book!` 
+                : `Success Adding Book!`;
+                this.$bvModal.hide('upsert-book-modal');
+                this.$bvToast.toast(content, {
+                    title: `Status`,
+                    solid: true,
+                    variant:'success'
+                });
+            }
+        },
+        showUpdateModal(book){
+            this.isEdit = true;
+            this.book = book
+            this.$bvModal.show('upsert-book-modal')
         }
     },
     computed:mapGetters(['allBooks']),
     created(){
         this.fetchBooks();
-        console.log(this.book);
     }
 }
 </script>

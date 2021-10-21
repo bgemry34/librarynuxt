@@ -54,6 +54,7 @@ export default {
         async onSubmit(e){
             e.preventDefault();
             const {usertype, username, password} = this;
+            
             let login = {
                 usertype,
                 username,
@@ -63,7 +64,7 @@ export default {
             const res = await loginUser(login);
             if(res.status == 200){
                 const { token } = res.data;
-                sessionStorage.setItem('userToken', token);
+                localStorage.setItem('userToken', token);
                 window.location.replace("/dashboard");
                 return;
             }

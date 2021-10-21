@@ -17,7 +17,7 @@ export const loginUser = async (login) => {
 }
 
 export const checkToken = async () => {
-    const userToken = await sessionStorage.getItem("userToken");
+    const userToken = await localStorage.getItem("userToken");
     try{
         const data = await axios.post(`${url}/login/me/`+userToken, {
         });
@@ -28,7 +28,7 @@ export const checkToken = async () => {
 }  
 
 export const fetchUsers = async () => {    
-    const token = await sessionStorage.getItem("userToken")
+    const token = await localStorage.getItem("userToken")
     try{
         const res = await axios.get(`${url}/users`, {
         headers: {
@@ -44,7 +44,7 @@ export const fetchUsers = async () => {
 }
 
 export const fetchUser = async (id) => {    
-    const token = await sessionStorage.getItem("userToken")
+    const token = await localStorage.getItem("userToken")
     try{
         const res = await axios.get(`${url}/users/`+id, {
         headers: {
@@ -60,7 +60,7 @@ export const fetchUser = async (id) => {
 }
 
 export const createUser = async (user) => {
-    const token = await sessionStorage.getItem("userToken")
+    const token = await localStorage.getItem("userToken")
     const {name, username, password, userType} = user
     try{
         const data = await axios.post(`${url}/users`, {
