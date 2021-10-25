@@ -2,18 +2,24 @@ import axios from 'axios'
 
 const url = 'https://library-system-mern.herokuapp.com/api';
 
-export const loginUser = async (login) => {
-    const {username, password, usertype} = login 
-    try{
-        const data = await axios.post(`${url}/login`, {
-            username,
-            password,
-            userType:usertype
-        });
-        return data;
-    }catch(error){
-        return error.response
-    }
+export const loginUser = (credentials) => {
+    const {username, password, usertype} = credentials
+
+    return axios.post(`${url}/login`, {
+        username,
+        password,
+        userType:usertype
+    }).then((res) => {
+        // Handle Token Success
+        const  {status} = res
+        const { token } = res.data;
+        localStorage.setItem('userToken', token);
+        console.log('Auth Succes', res)
+        return status==200
+    }).catch((err) => { 
+        //catch some error here
+        // console.log('Error', err)
+    });
 }
 
 export const checkToken = async () => {

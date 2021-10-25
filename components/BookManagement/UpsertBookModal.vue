@@ -63,10 +63,7 @@
 
 <script>
 export default {
-    props:['book', 'onSubmit', 'isEdit'],
-    created(){
-        console.log(this.isEdit);
-    } 
+    props:['book', 'onSubmit', 'isEdit']
 }
 </script>
 

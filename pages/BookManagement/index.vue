@@ -1,7 +1,7 @@
 <template>
   <div>
       <h1>Book Management</h1>
-      <div class="container">
+      <div class="container mb-2">
           <div class="col-xs-12">
               <div class="row">
                   <div class="col-md-6">
@@ -42,12 +42,20 @@
                                         icon="pencil-square" 
                                         variant="success" 
                                         aria-hidden="true"
-                                        @click="showUpdateModal(_book)">
+                                        @click="showUpdateModal(_book)"
+                                        >
                                         </b-icon>
                                     </div>
                                     <!-- delete -->
                                     <div class="col-md-6">
-                                        <b-icon class="pointer" scale="1.5" icon="trash" variant="danger" aria-hidden="true"></b-icon>
+                                        <b-icon 
+                                        class="pointer" 
+                                        scale="1.5" 
+                                        icon="trash" 
+                                        variant="danger" 
+                                        @click="showDeleteConfirmationModal(_book)"
+                                        aria-hidden="true">
+                                        </b-icon>
                                     </div>
                                 </div>
                             </div>
@@ -63,17 +71,23 @@
         :onSubmit="onSubmit" 
         :isEdit="isEdit" 
         />
+        <DeleteBookModal 
+        :book="book" 
+        :onDelete="onDelete"
+        />
   </div>
 </template>
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
-import {formatDate} from './../../../helper/Tools'
-import UpsertBookModal from '../../../components/BookManagement/UpsertBookModal.vue'
+import {formatDate} from './../../helper/Tools'
+import UpsertBookModal from '../../components/BookManagement/UpsertBookModal.vue'
+import DeleteBookModal from '../../components/BookManagement/DeleteBookModal.vue'
 export default {
     layout: 'sidebar',
     components:{
-        UpsertBookModal
+        UpsertBookModal,
+        DeleteBookModal
     },
     data(){
         return {
@@ -87,7 +101,7 @@ export default {
         }
     },
     methods:{
-        ...mapActions(['fetchBooks', 'addBook', 'editBook']),
+        ...mapActions(['fetchBooks', 'addBook', 'editBook', 'deleteBook']),
         formatDate,
         clearBookInputs(){
             this.isEdit = false;
@@ -118,10 +132,26 @@ export default {
                 });
             }
         },
+        async onDelete(e){
+            e.preventDefault();
+            if(this.deleteBook(this.book));{
+                this.$bvToast.toast('Success Deleting Book!', {
+                    title: `Status`,
+                    solid: true,
+                    variant:'success'
+                });
+            }
+            this.$bvModal.hide('delete-book-modal');
+        },
         showUpdateModal(book){
             this.isEdit = true;
             this.book = book
             this.$bvModal.show('upsert-book-modal')
+        },
+        showDeleteConfirmationModal(book){
+            this.book = book
+            //console.log('delete modal')
+            this.$bvModal.show('delete-book-modal')
         }
     },
     computed:mapGetters(['allBooks']),

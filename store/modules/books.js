@@ -1,4 +1,4 @@
-import {_fetchBooks, _createBook, _editBook} from './../../api/books'
+import {_fetchBooks, _createBook, _editBook, _deleteBook} from './../../api/books'
 
 const state = () => ({
     books:[
@@ -29,6 +29,15 @@ const actions = {
             return true;
         }
         return false;
+    },
+    async deleteBook({commit}, book){
+        const res = await _deleteBook(book);
+        if(res.status == 204)
+        {
+            commit('destroyBook', book);
+            return true;
+        }
+        return false;
     }
 };
 
@@ -39,6 +48,9 @@ const mutations = {
         state.books = state.books.map(_book=>{
             return _book.id !== book.id ? _book : book;
         })
+    },
+    destroyBook:(state, _book)=>{
+        state.books = state.books.filter(book=>book.id != _book.id);
     }
 };
 
