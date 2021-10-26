@@ -12,10 +12,10 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <nuxt-link :to="'/BookManagement'"><span class="d-none d-md-inline">Book Management</span></nuxt-link>
+                            <nuxt-link class="nav-link pl-0" :to="'/BookManagement'"><span class="d-none d-md-inline">Book Management</span></nuxt-link>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link pl-0" href="#"><i class="fa fa-cog fa-fw"></i> <span class="d-none d-md-inline">Borrow Book</span></a>
+                            <nuxt-link class="nav-link pl-0" :to="'/BorrowBooks'"><span class="d-none d-md-inline">Borrow Books</span></nuxt-link>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link pl-0" href="#"><i class="fa fa-heart codeply fa-fw"></i> <span class="d-none d-md-inline">User management</span></a>

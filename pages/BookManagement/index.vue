@@ -145,12 +145,11 @@ export default {
         },
         showUpdateModal(book){
             this.isEdit = true;
-            this.book = book
-            this.$bvModal.show('upsert-book-modal')
+            this.book = book;
+            this.$bvModal.show('upsert-book-modal');
         },
         showDeleteConfirmationModal(book){
-            this.book = book
-            //console.log('delete modal')
+            this.book = book;
             this.$bvModal.show('delete-book-modal')
         }
     },

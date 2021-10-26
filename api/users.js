@@ -33,7 +33,7 @@ export const checkToken = async () => {
     }
 }  
 
-export const fetchUsers = async () => {    
+export const _fetchUsers = async () => {    
     const token = await localStorage.getItem("userToken")
     try{
         const res = await axios.get(`${url}/users`, {
@@ -49,7 +49,7 @@ export const fetchUsers = async () => {
     }
 }
 
-export const fetchUser = async (id) => {    
+export const _fetchUser = async (id) => {    
     const token = await localStorage.getItem("userToken")
     try{
         const res = await axios.get(`${url}/users/`+id, {
